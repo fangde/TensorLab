@@ -1,4 +1,4 @@
-from tensor_lab import *
+from tensorlab import *
 
 code='''
 
