@@ -1,0 +1,11 @@
+index:
+
+- kind: fangde
+  ancestor:no
+  properties:
+  - name: id
+    direction: asc
+  - name: acc
+    direction: asc
+  
+

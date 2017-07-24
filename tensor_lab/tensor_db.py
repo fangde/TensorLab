@@ -406,7 +406,7 @@ class TensorDB(object):
     @AutoFill
     def save_model_architecture(self, s, args={}):
         self.__autofill(args)
-        fid = self.archfs.put(s, filename="modelarchitecture")
+        fid = self.archfs.put(s)
         args.update({"fid": fid})
         self.ModeArch.insert_one(args)
 
@@ -426,7 +426,10 @@ class TensorDB(object):
         try:
             archs = self.archfs.read(fid)
             '''print("[TensorDB] Find one params SUCCESS, {} took: {}s".format(args, round(time.time()-s, 2)))'''
-            return archs, fid
+            g={}
+            exec(archs,g)
+
+            return archs, fid, g['network_fn']
         except Exception as e:
             print ("exception")
             print (e)
