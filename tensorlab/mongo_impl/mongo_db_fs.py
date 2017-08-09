@@ -1,6 +1,6 @@
 import gridfs
 from pymongo import MongoClient
-from tensor_lab.tensor_db import indxImpl,fsImpl
+from tensorlab.tensor_db import indxImpl,fsImpl
 
 from gridfs import GridFS
 

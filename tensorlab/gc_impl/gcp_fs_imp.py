@@ -1,5 +1,5 @@
 import gc_file_io
-from tensor_lab.tensor_db import fsImpl
+from tensorlab.tensor_db import fsImpl
 
 
 class gcpfldImpl(fsImpl):

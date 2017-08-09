@@ -1,4 +1,4 @@
-from tensor_lab.tensor_db import indxImpl
+from tensorlab.tensor_db import indxImpl
 from gc_index_db import GoogleDocDB
 from google.cloud import logging
 
