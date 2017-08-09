@@ -85,7 +85,8 @@ if __name__ =="__main__":
 
     #n1.Params=w
 
-    n1.fit(5,d,l,128,[DBLogger(p2,n1)])
+    n1.fit(5,d,l,128,[DBLogger(p2,n1)],d[0:128],l[0:128])
+
 
     #p.del_params({})
     #p.del_train_log({})

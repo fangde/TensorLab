@@ -114,7 +114,7 @@ class MnistDB(data_impl):
         print "training reading"
         print t6
       
-        return d,l
+        return d.astype(np.float32),l.astype(np.int32)
     
     def generator_data(self,batch_size=20,args={'type':"train",'id':{"$lt":500}}):
             

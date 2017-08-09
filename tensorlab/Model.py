@@ -69,7 +69,8 @@ class Model(object):
                 c.on_epoch_begin(epoch,{})
             w=0
 
-            for X_train_a, y_train_a in tl.iterate.minibatches(X_train, y_train,batch_size, shuffle=True):
+            for X_train_a, y_train_a in tl.iterate.minibatches(X_train, y_train, batch_size, shuffle=True):
+
 
                 for c in callback:
                     c.on_batch_begin(w)
@@ -87,9 +88,8 @@ class Model(object):
             val_args={}
             if X_val is not None:
 
-                feed_dict = {self.x: X_val, self.y_: y_val}
-                [dc]=self.sess.run([self.loss],feed_dict=feed_dict)
-                val_args.update({'acc':dc})
+                vc=self.validate(X_val,y_val)
+                val_args.update({'acc':vc})
 
             for c in callback:
                 c.on_epoch_end(epoch,val_args)
@@ -159,6 +159,7 @@ class Model(object):
 
     def validate(self, X,Y):
         feed_dict={self.x:X,self.y_:Y}
+        feed_dict.update(self.network.all_drop)  # enable dropout or dropconnect layers
         [lo]=self.sess.run([self.loss],feed_dict=feed_dict)
         return lo
 

@@ -106,94 +106,15 @@ class TensorDB(object):
         print("[TensorDB] Connect SUCCESS")
 
 
-    # def save_bulk_data(self, data=None, filename='filename'):
-    #     """ Put bulk data into TensorDB.datafs, return file ID.
-    #     When you have a very large data, you may like to save it into GridFS Buckets
-    #     instead of Collections, then when you want to load it, XXXX
-    #
-    #     Parameters
-    #     -----------
-    #     data : serialized data.
-    #     filename : string, GridFS Buckets.
-    #
-    #     References
-    #     -----------
-    #     - MongoDB find, xxxxx
-    #     """
-    #     s = time.time()
-    #     f_id = self.datafs.put(data, filename=filename)
-    #     print("[TensorDB] save_bulk_data: {} took: {}s".format(filename, round(time.time()-s, 2)))
-    #     return f_id
-    #
-    # def save_collection(self, data=None, collect_name='collect_name'):
-    #     """ Insert data into MongoDB Collections, return xx.
-    #
-    #     Parameters
-    #     -----------
-    #     data : serialized data.
-    #     collect_name : string, MongoDB collection name.
-    #
-    #     References
-    #     -----------
-    #     - MongoDB find, xxxxx
-    #     """
-    #     s = time.time()
-    #     rl = self.db[collect_name].insert_many(data)
-    #     print("[TensorDB] save_collection: {} took: {}s".format(collect_name, round(time.time()-s, 2)))
-    #     return rl
-    #
-    # def find(self, args={}, collect_name='collect_name'):
-    #     """ Find data from MongoDB Collections.
-    #
-    #     Parameters
-    #     -----------
-    #     args : dictionary, arguments for finding.
-    #     collect_name : string, MongoDB collection name.
-    #
-    #     References
-    #     -----------
-    #     - MongoDB find, xxxxx
-    #     """
-    #     s = time.time()
-    #
-    #     pc = self.db[collect_name].find(args)  # pymongo.cursor.Cursor object
-    #     flist = pc.distinct('f_id')
-    #     fldict = {}
-    #     for f in flist: # you may have multiple Buckets files
-    #         # fldict[f] = pickle.loads(self.datafs.get(f).read())
-    #         # s2 = time.time()
-    #         tmp = self.datafs.get(f).read()
-    #         # print(time.time()-s2)
-    #         fldict[f] = pickle.loads(tmp)
-    #         # print(time.time()-s2)
-    #         # exit()
-    #     # print(round(time.time()-s, 2))
-    #     data = [fldict[x['f_id']][x['id']] for x in pc]
-    #     data = np.asarray(data)
-    #     print("[TensorDB] find: {} get: {} took: {}s".format(collect_name, pc.count(), round(time.time()-s, 2)))
-    #     return data
-
-    # def del_data(self, data, args={}):
-    #     pass
-    #
-    # def save_model(self):
-    #     pass
-    #
-    # def load_model(self):
-    #     pass
-    #
-    # def del_model(self):
-    #     pass
-
-    def __autofill(self, args):
-        return args.update({'studyID': self.studyID})
-
     def __serialization(self, ps):
         return pickle.dumps(ps, protocol=2)
 
     def __deserialization(self, ps):
         return pickle.loads(ps)
 
+
+
+    @AutoFill
     def save_params(self, params=[], args={}):  # , file_name='parameters'):
         """ Save parameters into MongoDB Buckets, and save the file ID into Params Collections.
 
@@ -207,7 +128,6 @@ class TensorDB(object):
         f_id : the Buckets ID of the parameters.
         """
 
-        self.__autofill(args)
         s = time.time()
         f_id = self.paramsfs.put(self.__serialization(params))  # , file_name=file_name)
         args.update({'f_id': f_id, 'time': datetime.utcnow()})
@@ -403,14 +323,14 @@ class TensorDB(object):
         _t = _s + "    " + str(self.db)
         return _t
 
-    @AutoFill
+
     def save_model_architecture(self, s, args={}):
-        self.__autofill(args)
+
         fid = self.archfs.put(s)
         args.update({"fid": fid})
         self.ModeArch.insert_one(args)
 
-    @AutoFill
+
     def load_model_architecture(self, args={}):
 
         d = self.ModeArch.find_one(args)
@@ -468,54 +388,9 @@ class TensorDB(object):
         self.JOBS.find_one_and_update({'_id': jid}, {'$set': {'Running': True, "Finished": datetime.utcnow()}})
 
 
-'''
 
-class DBLogger:
-    def __init__(self, db, model):
-        self.db = db
-        self.model = model
+    def queryTrainLog(self,args={}):
+        return list(self.TrainLog.find(args))
 
-    def on_train_begin(self, logs={}):
-        print "start"
-
-    def on_train_end(self, logs={}):
-        print "end"
-
-    def on_epoch_begin(self, epoch, logs={}):
-        self.epoch = epoch
-        self.et = time.time()
-        return
-
-    def on_epoch_end(self, epoch, logs={}):
-        self.et = time.time() - self.et
-        print("ending")
-        print(epoch)
-        logs['epoch'] = epoch
-        logs['time'] = datetime.utcnow()
-        logs['stepTime'] = self.et
-        # logs['acc']=np.asscalar(logs['acc'])
-        print logs
-
-        w = self.model.Params
-        fid = self.db.save_params(w, logs)
-        logs.update({'params': fid})
-        self.db.valid_log(logs)
-
-    def on_batch_begin(self, batch, logs={}):
-        self.t = time.time()
-        self.losses = []
-        self.batch = batch
-
-    def on_batch_end(self, batch, logs={}):
-        self.t2 = time.time() - self.t
-        logs['acc'] = np.asscalar(logs['acc'])
-        # logs['loss']=np.asscalar(logs['loss'])
-        logs['step_time'] = self.t2
-        logs['time'] = datetime.utcnow()
-        logs['epoch'] = self.epoch
-        logs['batch'] = self.batch
-        self.db.train_log(logs)
-
-
-'''
-
+    def queryValLog(self,args={}):
+        return list(self.ValidLog.find(args))

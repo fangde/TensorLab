@@ -33,6 +33,7 @@ class DBLogger:
         w=self.model.Params
         fid=self.db.save_params(w,logs)
         logs.update({'params':fid})
+
         self.db.valid_log(logs)
     def on_batch_begin(self, batch,logs={}):
         self.t=time.time()
