@@ -1,16 +1,33 @@
 import graphene
 
-print graphene.__version__
 
-#schema
 
-from DataLoader import db
+
+
+
+
 
 
 
 class Log(graphene.Interface):
     studyID=graphene.String()
     epoch=graphene.Int()
+
+
+class Params(graphene.ObjectType):
+    class Meta:
+            interfaces = (Log,)
+
+    modelParams=graphene.String()
+
+    def resolve_modelParams(self,args,context,info):
+        pass
+
+
+
+
+
+
 
 
 
@@ -54,32 +71,5 @@ class LogQuery(graphene.ObjectType):
         return map(mf, p)
 
 
-
-
-
-scheme=graphene.Schema(query=LogQuery)
-
-print scheme
-print db
-
-results=scheme.execute('''
-    query { 
-            trainHistory (epoch: 50,studyID: "run5") 
-            { 
-            acc,
-            stepTime
-            }
-        }
-    ''', context_value={'tdb': db})
-
-
-print results
-print results.data['trainHistory'][0]['stepTime']
-
-
-
-
-
-
-
+gqlSchema = graphene.Schema(query=LogQuery)
 

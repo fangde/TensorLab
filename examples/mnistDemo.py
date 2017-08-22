@@ -1,10 +1,8 @@
 import sys
 sys.path.append('../')
-import tensorlab
-import yaml
-from MnistDB import  MnistDB
-from tensorlab import Model
+from tensorlab.TensorLayerApp import Model
 from tensorlab import DBLogger
+
 
 import seed
 

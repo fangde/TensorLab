@@ -1,0 +1,5 @@
+TensorDB:
+    backend:
+        type: mongo
+        port: 27018
+        db_name: mnistTensorDB

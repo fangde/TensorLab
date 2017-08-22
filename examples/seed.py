@@ -1,10 +1,9 @@
 import sys
 sys.path.append('../')
-import tensorflow as tf
 import tensorlayer as tl
 import numpy as np
 
-from tensorlab import *
+from tensorlab.TensorDB import *
 
 from MnistDB import MnistDB
 
