@@ -1,5 +1,18 @@
 import graphene
 
+
+class LearningLog(graphene.ObjectType):
+    pass
+
+class Parameters(graphene.ObjectType):
+    pass
+
+
+
+class ModelArch(graphene.ObjectType)
+    pass
+
+
 class Query(graphene.ObjectType):
     hello=graphene.String(name=graphene.Argument(graphene.String, default_value="stranger"))
     greeting = graphene.String(name=graphene.Argument(graphene.String, default_value="stranger"))

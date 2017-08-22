@@ -6,33 +6,21 @@ import plotly.graph_objs as go
 import pandas as pd
 import pymongo
 import seed
+import numpy
+import uuid
 
 db=seed.db
-
-
-
-
-
-
-
 df=pd.DataFrame(db.queryValLog({}))
 
+weights=db.find_all_params({'studyID':'run2'})
 
-
-
-print df.columns.values.tolist()
-
-print df.groupby('studyID')
-
-
-print df.studyID.unique()
+d=[]
+for i in range(1,6,2):
+    di=numpy.array([w[i].ravel() for w in weights])
+    d.append(di)
 
 
 app=dash.Dash()
-
-
-
-
 
 app.layout=html.Div(children=[
     html.H1(children="hello dash"),
@@ -64,7 +52,7 @@ app.layout=html.Div(children=[
 
     ),
 
-    dcc.Graph(id='example-graph',
+    dcc.Graph(id='trajectoryPlot',
               figure={
                     'data':[
                         go.Scatter(
@@ -81,15 +69,46 @@ app.layout=html.Div(children=[
                         ) for i in df.studyID.unique()
                     ],
                   'layout':{
-                      'title':'Dash visulization'
+                      'title':'PrameterLoss'
                   }
 
 
               }
 
-    )
+    ),
+    dcc.Dropdown(
+        options=[
+            {'label': 'New York City', 'value': 'NYC'},
+            {'label': u'Montreal', 'value': 'MTL'},
+            {'label': 'San Francisco', 'value': 'SF'}
+        ],
+        value='MTL',
+        multi=True
 
-])
+    ),
+
+    html.Div(children=[
+
+     dcc.Graph( id='pt1'+str(uuid.uuid4()),
+              figure={
+                  'data': [
+                      go.Heatmapgl(
+                          z=di,
+                          opacity=0.7,
+
+                          name="hello"
+                      ) ],
+                  'layout': {
+                      'title': 'WeightVisualization'
+                  }
+
+              }
+
+              ) for di in d ])
+
+
+]
+)
 
 
 @app.callback(

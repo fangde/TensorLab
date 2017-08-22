@@ -34,7 +34,8 @@ class fsImpl(object):
 def AutoFill(func):
     def func_wrapper(self, *args, **kwargs):
         d = inspect.getcallargs(func, self, *args, **kwargs)
-        d['args'].update({"studyID": self.studyID})
+        if 'studyID' not in d['args']:
+            d['args'].update({"studyID": self.studyID})
         return func(**d)
 
     return func_wrapper
@@ -170,7 +171,7 @@ class TensorDB(object):
             return False, False
 
     @AutoFill
-    def find_all_params(self, args={}):
+    def find_all_params(self, args={},sort=[('time',1)]):
         """ Find all parameter from MongoDB Buckets
 
         Parameters
@@ -184,13 +185,13 @@ class TensorDB(object):
         """
 
         s = time.time()
-        pc = self.Params.find(args)
+        pc = self.Params.find(args).sort(sort)
 
         if pc is not None:
             f_id_list = pc.distinct('f_id')
             params = []
             for f_id in f_id_list:  # you may have multiple Buckets files
-                tmp = self.paramsfs.read(fid)
+                tmp = self.paramsfs.read(f_id)
                 params.append(self.__deserialization(tmp))
         else:
             print("[TensorDB] FAIL! Cannot find any: {}".format(args))

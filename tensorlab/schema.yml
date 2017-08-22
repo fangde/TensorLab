@@ -1,0 +1,13 @@
+--
+Log:
+  type: ['train','val','test]
+  studyID: string
+  acc: float
+  timestamp:
+  stepTime:
+
+ModelArch:
+  name:
+
+
+

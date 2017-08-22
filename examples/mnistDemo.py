@@ -27,8 +27,8 @@ def run_one(name_test):
 
 
 if __name__ == "__main__":
-    run_one('run3')
-    run_one('run4')
+    run_one('run5')
+    run_one('run6')
 
 
 
