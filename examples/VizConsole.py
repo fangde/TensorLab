@@ -1,8 +1,10 @@
 import dash
-from dash.dependencies import Input,Output
+
 import dash_core_components as dcc
 import dash_html_components as html
 import plotly.graph_objs as go
+
+from dash.dependencies import Input,Output
 import pandas as pd
 import pymongo
 import seed
@@ -12,22 +14,21 @@ import uuid
 db=seed.db
 df=pd.DataFrame(db.queryValLog({}))
 
-weights=db.find_all_params({'studyID':'run2'})
+weights,objs=db.find_all_params({'studyID':'run3'})
 
 d=[]
 for i in range(1,6,2):
-    di=numpy.array([w[i].ravel() for w in weights])
-    d.append(di)
+   di=numpy.array([w[i].ravel() for w in weights])
+   d.append(di)
+
 
 
 app=dash.Dash()
 
 app.layout=html.Div(children=[
-    html.H1(children="hello dash"),
+    html.H1(children="TensorLab Visualization"),
 
-    html.Div(children='''
-    Dash: a Weba pplication framework for python
-    '''),
+    html.H2(children="Parameter Longitudinal Analysis"),
 
     dcc.Input(id='my-id', value='initial value', type="text"),
     html.P(),
@@ -39,23 +40,12 @@ app.layout=html.Div(children=[
 ##    html.Img(id='my-img',src="data:image/gif;base64,R0lGODlhEAAQAMQAAORHHOVSKudfOulrSOp3WOyDZu6QdvCchPGolfO0o/XBs/fNwfjZ0frl3/zy7////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAkAABAALAAAAAAQABAAAAVVICSOZGlCQAosJ6mu7fiyZeKqNKToQGDsM8hBADgUXoGAiqhSvp5QAnQKGIgUhwFUYLCVDFCrKUE1lBavAViFIDlTImbKC5Gm2hB0SlBCBMQiB0UjIQA7"),
 
 
-    html.P(children="SelecViz"),
 
-    dcc.Dropdown(
-        options=[
-            {'label': 'New York City', 'value': 'NYC'},
-            {'label': u'Montreal', 'value': 'MTL'},
-            {'label': 'San Francisco', 'value': 'SF'}
-        ],
-        value='MTL',
-        multi=True
 
-    ),
-
-    dcc.Graph(id='trajectoryPlot',
+    dcc.Graph(id='ParametersPlot',
               figure={
                     'data':[
-                        go.Scatter(
+                        go.Scattergl(
                             x=df[df['studyID'] == i]['epoch'],
                             y=df[df['studyID'] == i]['acc'],
                             text=df[df['studyID'] == i]['time'],
@@ -69,7 +59,7 @@ app.layout=html.Div(children=[
                         ) for i in df.studyID.unique()
                     ],
                   'layout':{
-                      'title':'PrameterLoss'
+                      'title':'Loss of all the  Parameters'
                   }
 
 
@@ -92,14 +82,15 @@ app.layout=html.Div(children=[
      dcc.Graph( id='pt1'+str(uuid.uuid4()),
               figure={
                   'data': [
-                      go.Heatmapgl(
-                          z=di,
+                      go.Surface(
+                          z=numpy.abs(di.transpose()),
                           opacity=0.7,
 
                           name="hello"
                       ) ],
                   'layout': {
-                      'title': 'WeightVisualization'
+                      'title': 'Weight Longitudinal Visualization'
+
                   }
 
               }

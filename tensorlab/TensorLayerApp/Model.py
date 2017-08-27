@@ -153,7 +153,9 @@ class Model(object):
             c.on_train_end()
 
     def inference(self, X):
+
         feed_dict={self.x:X}
+        feed_dict.update(self.network.all_drop)  # enable dropout or dropconnect layers
         [predict]=self.sess.run([self.predict],feed_dict=feed_dict)
         return predict
 
