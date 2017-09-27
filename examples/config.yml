@@ -1,10 +1,12 @@
 dataDB:
-    port: 27018
+    port: 27017
+    ip: mongohost
     db_name: mnistTensorLabDemo
 
 
 TensorDB:
     backend:
         type: mongo
-        port: 27018
+        port: 27017
+        ip: mongohost
         db_name: mnistTensorDB
