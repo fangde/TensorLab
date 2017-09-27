@@ -1,4 +1,23 @@
 import dash
+
+import dash_core_components as dcc
+import dash_html_components as html
+import plotly.graph_objs as go
+
+from dash.dependencies import Input,Output
+import pandas as pd
+import pymongo
+import seed
+import numpy
+import uuid
+
+db=seed.db
+df=pd.DataFrame(db.queryValLog({}))
+
+weights,objs=db.find_all_params({'studyID':'run3'})
+
+d=[]
+for i in range(1,6,2):
    di=numpy.array([w[i].ravel() for w in weights])
    d.append(di)
 
