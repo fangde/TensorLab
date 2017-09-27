@@ -41,11 +41,12 @@ def paramgoogle():
 
 
 if __name__ == "__main__":
-    #run_one('run5')
-    #run_one('run6')
-    rank,fl=paramgoogle()
-    print rank['loss']
-    print fl
+    run_one('run5')
+    run_one('run6')
+    run_one('myttudy100')
+    #rank,fl=paramgoogle()
+    #print rank['loss']
+    #print fl
 
 
 
