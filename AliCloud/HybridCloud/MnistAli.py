@@ -40,7 +40,7 @@ class MnistDBAliyun(data_impl):
             self.db.authenticate(user_name, password)
 
         ## define file system (Buckets)
-        self.datafs =AliyunFs('surgicalaihost')
+        self.datafs =AliyunFs('fangdetest')
 
     def import_data(self,X,y,args={}):
 
@@ -49,7 +49,7 @@ class MnistDBAliyun(data_impl):
         t_1=time.time()-t
         s1=compress(s,compression_level=3)
         t_2=time.time()-t
-        iid=self.datafs.put(s1,filename="imageData")
+        iid=self.datafs.put(s1)
         t2=time.time()
         print len(s)
         print len(s1)
