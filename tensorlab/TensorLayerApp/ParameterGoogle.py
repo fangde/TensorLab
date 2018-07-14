@@ -1,4 +1,4 @@
-from TensorLayerApp import Model
+from Model import Model
 
 
 def ParamerRanking(mm, x,y):

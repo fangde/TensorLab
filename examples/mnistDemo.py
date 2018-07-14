@@ -2,7 +2,7 @@ import sys
 sys.path.append('../')
 from tensorlab.TensorLayerApp import Model
 from tensorlab import DBLogger
-from tensorlab.ParameterGoogle import ParamerRanking;
+from tensorlab import ParamerRanking;
 
 import seed
 
