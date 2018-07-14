@@ -9,5 +9,5 @@ setup(name='tensor-layer-db',
       author_email='liufangde@surgicalai.cn',
       license='MIT',
       packages=['tensorlab'],
-      install_requires=['pymongo','lz4'],
+      install_requires=['pymongo','lz4','graphene'],
       zip_safe=False)
