@@ -21,7 +21,7 @@ It is under active develoment, we are now adding the backend, that support googl
 ## Try It
 there is a mnist example, containerized in docker, which has a docker for mongodb and also a docker for a tensordb training worker.
 you can simply run it via the 
-TensorLayerDocker/start.sh
+example/start.sh
 
 then inside the docker 
 type
