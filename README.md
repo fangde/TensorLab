@@ -21,9 +21,16 @@ It is under active develoment, we are now adding the backend, that support googl
 ## Try It
 there is a mnist example, containerized in docker, which has a docker for mongodb and also a docker for a tensordb training worker.
 you can simply run it via the 
-TensorLayerDocker/start.sh
+example/start.sh
 
-It is highly recommand you use a gui client for mongodb to monitor the training, you can try the studio3T(https://studio3t.com/)
+then inside the docker 
+type
 
-and connecto the mongodb servier via ip:27019
+python seed.py
+python mnistdemo.py
+
+
+It is highly recommand you use a gui client for mongodb to monitor the training, you can try the studio3T(https://studio3t.com/) and connecto the mongodb servier via ip:27019
+
+
 
