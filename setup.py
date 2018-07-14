@@ -1,3 +1,6 @@
+
+from setuptools import setup
+
 setup(name='tensor-layer-db',
       version='0.1',
       description='the model life cycle managment system',
